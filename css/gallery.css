@@ -1,0 +1,33 @@
+body {
+	font-family: Arial, sans-serif;
+}
+
+#gallery {
+	text-align: center;
+}
+
+#gallery figure {
+	margin: 0;
+}
+
+#gallery ul {
+	list-style: none;
+	padding: 0;
+	display: flex;
+	justify-content: center;
+}
+
+#gallery li {
+	margin: 0 5px;
+}
+
+#gallery img {
+	cursor: pointer;
+	transition: filter 0.3s ease;
+}
+
+#gallery figcaption {
+	margin-top: 10px;
+	font-size: 18px;
+	color: #555;
+}
