@@ -1,7 +1,23 @@
 body {
 	font-family: Arial, sans-serif;
-}
+	background-color: #191970;
 
+}
+.button{
+	margin-top:50px;
+	padding:10px;
+	width: 100px;
+	margin-left: auto;
+	margin-right: auto;
+	border:solid thin;
+	background-color: #FF7518;
+}
+.button:hover{
+	cursor: pointer;
+}
+h1 {
+	color:#FF7518;
+}
 #gallery {
 	text-align: center;
 }
@@ -29,5 +45,5 @@ body {
 #gallery figcaption {
 	margin-top: 10px;
 	font-size: 18px;
-	color: #555;
+	color: #FF7518;
 }

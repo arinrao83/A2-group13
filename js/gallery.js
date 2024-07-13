@@ -35,24 +35,106 @@ document.addEventListener("DOMContentLoaded", function() {
 			caption: "Market in Münster"
 		}
 	];
-
-	images.forEach((image, index) => {
+	// used to track selected image so that the slideshow will start from that point 
+	let selectedIndex = null;
+	// obj constructor
+	class Image{
+	
+	constructor(src, alt, width,height, caption){
+		this.src = src;
+		this.alt = alt;
+		this.width = width;
+		this.height = height;
+		this.caption = caption;
+		
+	}
+	createTumbnail(index){
 		const li = document.createElement("li");
 		const img = document.createElement("img");
-		img.src = image.small;
-		img.alt = image.alt;
-		img.width = 240;
-		img.height = 160;
+		
+		img.src = this.src;
+		img.alt = this.alt;
+		img.width = this.width;
+		img.height = this.height;
+		img.caption = this.caption;
+		
 		img.style.filter = index === 0 ? "grayscale(0%)" : "grayscale(100%)";
+		// on click replace src from small to large
 		img.addEventListener("click", function() {
-			featuredImage.src = image.large;
-			featuredImage.alt = image.alt;
-			caption.textContent = image.caption;
-
-			document.querySelectorAll("#thumbnails img").forEach(img => img.style.filter = "grayscale(100%)");
+			selectedIndex = index;
+			featuredImage.src = this.src.replace("small", "large");
+			featuredImage.alt = this.alt;
+			caption.textContent = this.caption;
+			
+			document.querySelectorAll("#thumbnails img").forEach(img => {
+				img.style.filter = "grayscale(100%)";
+				img.style.border = "";
+				img.style.borderRadius = "";
+			});
+			//add border to selected img
+			img.style.border = "solid 3px #FF7518";
+			img.style.borderRadius = "10px";
 			img.style.filter = "grayscale(0%)";
 		});
 		li.appendChild(img);
 		thumbnailsContainer.appendChild(li);
+		
+	}
+}
+	// set default img 
+	const defaultImg = images[0];
+	featuredImage.src = defaultImg.large;
+	featuredImage.alt = defaultImg.alt;
+	
+	featuredImage.caption = defaultImg.caption;
+	
+
+	images.forEach((image, index) => {
+		// create new image object for each arr element
+		let img = new Image(image.small, image.alt, 240, 160, image.caption);
+		img.createTumbnail(index);
+		
+		
 	});
+	
+	//slideshow 
+	let intervalId;
+	let index = 0;
+
+	function slideshow(){
+		
+		if(button.textContent === "Start slideshow"){
+			button.textContent = "Stop slideshow";
+			function showImg(){
+				if (selectedIndex !== null) {
+					index = selectedIndex;
+					selectedIndex = null;
+				}
+				featuredImage.src = images[index].large;
+				
+				document.querySelectorAll("#thumbnails img").forEach((img, imgIndex) => {
+					if (imgIndex === index) {
+						img.style.border = "solid 3px #FF7518";
+						img.style.borderRadius = "10px";
+						img.style.filter = "grayscale(0%)";
+					} else {
+						img.style.filter = "grayscale(100%)";
+						img.style.border = "";
+						img.style.borderRadius = "";
+					}
+				});
+				index ++;
+				//display first image again after there are no more images to display 
+				if(index == images.length){
+					index = 0;
+				}
+			}
+			intervalId = setInterval(showImg, 1000);
+		}else{
+			button.textContent = "Start slideshow";
+			clearInterval(intervalId)
+		}
+	}
+	const button = document.querySelector(".button");
+	button.addEventListener("click", slideshow);
 });
